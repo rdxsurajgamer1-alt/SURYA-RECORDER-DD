@@ -1,0 +1,28 @@
+
+name: Show Recorder Source Code
+
+on:
+  workflow_dispatch:
+
+jobs:
+  show-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract project ZIP
+        run: |
+          unzip -q UltraScreenRecorder-Source.zip -d build-project
+
+      - name: Print Kotlin source files
+        run: |
+          find build-project/UltraScreenRecorder/app/src/main -type f \( -name "*.kt" -o -name "AndroidManifest.xml" \) -print
+          echo "===== SOURCE CODE START ====="
+          find build-project/UltraScreenRecorder/app/src/main -type f -name "*.kt" | while read f; do
+            echo "===== FILE: $f ====="
+            cat "$f"
+            echo
+          done
+          echo "===== MANIFEST ====="
+          cat build-project/UltraScreenRecorder/app/src/main/AndroidManifest.xml
